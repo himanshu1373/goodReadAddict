@@ -1,0 +1,379 @@
+<nav class="navbar navbar-default mobile-menu" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header navbar-center">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"
+               style="font-family: Calibri; font-size: 21px; color: #000;" href="">
+                goodReadsAddict<small style="color: teal;">.com</small>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse"
+             id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="text-center">
+                    <p style="font-size: 18px!important; color: #aaa;">Welcome, <i>{{loggedInUser}}</i></p>
+                </li>
+                <li>
+                    <a href="#/search">
+                        <i class="fa fa-home"></i> &nbsp;Home
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#/favorites">
+                        <i class="fa fa-heart"></i> &nbsp;Favorites
+                    </a>
+                </li>
+                <li>
+                    <a href="#/read">
+                        <i class="fa fa-book"></i> &nbsp;To Read
+                    </a>
+                </li>
+                <li>
+                    <a href="#/profile">
+                        <i class="fa fa-user"></i> &nbsp;Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="#/changePassword">
+                        <i class="fa fa-key"></i> &nbsp;Change Password
+                    </a>
+                </li>
+                <li>
+                    <a href="#/">
+                        <i class="fa fa-sign-out"></i> &nbsp;Sign Out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="content" class="container-fluid">
+    <h2 style="font-size: 32px; font-family: Calibri;">
+        Your
+        "Favorites" list
+    </h2>
+    <div class="row">
+        <div class="col-lg-12" ng-show="totalResults == 0">
+            <p>
+                <i>Nothing added to your Favorites</i>
+            </p>
+        </div>
+    </div>
+    <br />
+    <div id="searchDetails" class="row">
+        <div style="width: 100%">
+            <table class="table table-striped" border="0"
+                   ng-show="totalResults && bookDetailsPage == false">
+                <tr ng-repeat="fav in favDetails">
+                    <td style="width: 1px;">
+                        <a ng-href="{{fav.infoLink}}" onclick="openExternalLink(this); return false;">
+                            <img ng-src="{{fav.imageLinkThumbnail}}" ng-if="fav.imageLinkThumbnail" />
+                            <img ng-src="{{fav.imageLinkSmallThumbnail}}" ng-if="!fav.imageLinkThumbnail" />
+                        </a>
+                    </td>
+                    <td>
+                        <p>
+                            <a id="{{fav.bookId}}" style="font-size: 18px!important;"
+                               href="" ng-click="showBookDetails(fav.bookId)">{{fav.bookName}}</a>
+                        </p>
+                        <p>
+                            <b>Author: </b> {{fav.authors | authorFilter}}
+                        </p>
+                        <p>
+                            <b>Publisher: </b> {{fav.publisher}}, {{
+                            fav.publishedDate |
+							dateFilter
+                            }}
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="bookDetails" class="row"
+         style="width: 100%; background-size: cover; margin-left: auto; margin-right: auto;"
+         ng-show="bookDetailsPage == true">
+        <div class="well" style="overflow: hidden;">
+            <div class="row">
+                <div class="col-lg-12 text-right">
+                    <button type="button" class="btn btn-success"
+                            ng-click="backToResultsPage()">
+                        Back to Favorites
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-success" role="alert"
+             ng-show="addedToRead == true">
+            <i class="fa fa-check"></i>
+            &nbsp;Added to your "To Read" successfully.
+        </div>
+        <div class="alert alert-warning" role="alert"
+             ng-show="addedToRead == false">
+            <i class="fa fa-warning"></i>
+            &nbsp;This book is already in your "To Read"
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center" ng-show="bookDetails.volumeInfo.imageLinks">
+                <img ng-src="{{bookDetails.volumeInfo.imageLinks.small}}" ng-show="bookDetails.volumeInfo.imageLinks.small" />
+                <img ng-src="{{bookDetails.volumeInfo.imageLinks.thumbnail}}" ng-show="!bookDetails.volumeInfo.imageLinks.small" />
+            </div>
+            <br />
+            <div class="col-lg-12 text-left">
+                <p class="title" style="font-size: 18px!important;">
+                    {{bookDetails.volumeInfo.title}} <small class="subtitle">
+                        {{
+bookDetails.volumeInfo.subtitle
+						| subtitleFilter
+                        }}
+                    </small>
+                </p>
+                <div class="row">
+                    <div class="col-lg-4 text-left">
+                        <p style="float: left">
+                            <b>Average Rating: </b>
+                        </p>
+                    </div>
+                    <div class="col-lg-8 text-left">
+                        <div class='rating_bar' style="margin-top: -0.25%; float: left;">
+                            <div class='view_rating' style='{{getStars(bookDetails.averageRating)}}'></div>
+                        </div>
+                    </div>
+                </div>
+                <p>
+                    <b>Author: </b> {{bookDetails.volumeInfo.authors | authorFilter}}
+                </p>
+                <p>
+                    <b>Publisher: </b> {{bookDetails.volumeInfo.publisher}},
+                    {{bookDetails.volumeInfo.publishedDate | dateFilter}}
+                </p>
+                <p>
+                    <b>ISBN: </b>
+                    {{bookDetails.volumeInfo.industryIdentifiers[0].identifier}},
+                    {{bookDetails.volumeInfo.industryIdentifiers[1].identifier}}
+                </p>
+                <p>
+                    <b>Cost: </b> {{bookDetails.saleInfo.retailPrice.currencyCode}}
+                    {{bookDetails.saleInfo.retailPrice.amount | costFilter}}
+                </p>
+                <p>
+                    <b>Description: </b> {{
+bookDetails.volumeInfo.description |
+					descFilter
+                    }}
+                </p>
+
+                <br /> <br />
+                <a href="https://play.google.com/store/books/details?id={{bookDetails.id}}&rdid=book-{{bookDetails.id}}&rdot=1&source=gbs_atb&pcampaignid=books_booksearch_atb" onclick="openExternalLink(this); return false;"
+                   class="btn btn-primary" style="margin-bottom: 3%; width: 100%;"
+                   ng-show="bookDetails.saleInfo.saleability == 'FOR_SALE'">
+                    <i class="fa fa-credit-card"></i> &nbsp;Buy this book
+                </a>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-success"
+                                style="margin-bottom: 3%; width: 100%;"
+                                ng-click="removeFromFav(bookDetails.id)">
+                            <i class="fa fa-trash"></i> &nbsp;Remove from
+                            "Favorites"
+                        </button>
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-success"
+                                style="margin-bottom: 3%; width: 100%;" ng-click="addToRead(bookDetails.id)">
+                            <i class="fa fa-book"></i> &nbsp;Mark "To
+                            Read"
+                        </button>
+                    </div>
+                    <div class="col-lg-12">
+                        <button class="btn btn-info" data-toggle="modal"
+                                data-target="#myModal" style="margin-bottom: 3%; width: 100%;"
+                                ng-show="bookDetails.accessInfo.pdf.acsTokenLink || bookDetails.accessInfo.epub.acsTokenLink">
+                            <i class="fa fa-download"></i> &nbsp;Get
+                            Sample
+                        </button>
+                    </div>
+                    <div class="col-lg-12">
+                        <a href="ui/preview.html?{{bookDetails.id}}" onclick="previewBook(this); return false;"
+                           ng-show="bookDetails.accessInfo.embeddable == true">
+                            <img src="images/gbs_preview_button.png" style="margin-bottom: 3%;" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">Sample type</h4>
+                        </div>
+                        <div class="modal-body text-center">
+                            <h5>Please select a sample type</h5>
+                            <br /> <a href="{{bookDetails.accessInfo.pdf.acsTokenLink}}"
+                                      class="btn btn-default"
+                                      ng-show="bookDetails.accessInfo.pdf.acsTokenLink"
+                                      style="margin-right: 2%;"
+                                      onclick="getSample(this); return false;">PDF</a> <a href="{{bookDetails.accessInfo.epub.acsTokenLink}}"
+                                                                                          class="btn btn-default"
+                                                                                          ng-show="bookDetails.accessInfo.epub.acsTokenLink"
+                                                                                          onclick="getSample(this); return false;">EPUB</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-12">
+                <div style="font-family: Calibri; font-size: 21px;">
+                    <i class="fa fa-comments"
+                       style="margin-right: 1.2%; margin-top: 1.8vmin; float: left;"></i>
+                    <p style="font-size: 21px!important;">Reviews</p>
+                </div>
+                <div class="row" ng-show="noReviews == true">
+                    <div class="col-lg-3">
+                        <p>
+                            <i>No Reviews Found</i>
+                        </p>
+                    </div>
+                </div>
+                <div class="">
+                    <table class="table table-striped" ng-show="noReviews == false">
+                        <tbody>
+                            <tr ng-repeat="reviewItem in reviews">
+                                <td ng-if="reviewItem.user == reviewEmail && editReviewAndRating == false">
+                                    <p>
+                                        <strong style="font-size: 18px; color: teal;">{{reviewItem.user}}</strong>
+                                        &nbsp;on&nbsp; <font style="color: #a9a9a9;">{{reviewItem.date}}</font>
+                                        <a href="" style="float: right; font-size: 16px;"
+                                           ng-click="editReview()">Edit</a>
+                                    </p>
+                                    <p>
+                                        <div class='rating_bar'
+                                             style="margin-top: 1px; margin-left: -0.5%;">
+                                            <div class='view_rating' style='{{getStars(reviewItem.rating)}}'></div>
+                                        </div>
+                                    </p>
+                                    <p>{{reviewItem.review}}</p>
+                                </td>
+                                <td ng-if="reviewItem.user == reviewEmail && editReviewAndRating == true">
+                                    <form role="form" id="form">
+                                        <div>
+                                            <div class="form-group" ng-init="test = editedReview">
+                                                <div id="reviewRating"></div>
+                                                <div class="alert alert-warning" role="alert" id="alert"
+                                                     ng-show="editReviewError == true">
+                                                    Please provide
+                                                    Review for this book.
+                                                </div>
+                                                <label>
+                                                    <p>
+                                                        Re-rate this book <font style="color: red">&nbsp;*</font>
+                                                    </p>
+                                                </label>
+                                                <div class="row">
+                                                    <star-rating rating-value="userRating" max="5"
+                                                                 on-rating-selected="rateFunction(userRating)"
+                                                                 controller="starRatingController" class="col-lg-12"
+                                                                 style="margin-left: 1.6vmin;"></star-rating>
+                                                </div>
+                                                <br /> <label>
+                                                    <p>
+                                                        Edit Review Comments <font style="color: red">&nbsp;*</font>
+                                                    </p>
+                                                </label> <textarea type="text" id="editReview" class="form-control"
+                                                                   placeholder="" ng-model="test"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary"
+                                                    style="margin-right: 2%;"
+                                                    ng-click="submitEditedReview(test)">
+                                                Submit
+                                            </button>
+                                            <button type="button" class="btn btn-default"
+                                                    ng-click="cancelEditReview()">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td ng-if="reviewItem.user != reviewEmail">
+                                    <p>
+                                        <strong style="font-size: 18px; color: teal;">{{reviewItem.user}}</strong>
+                                        &nbsp;on&nbsp; <font style="color: #a9a9a9;">{{reviewItem.date}}</font>
+                                    </p>
+                                    <p>
+                                        <div class='rating_bar'
+                                             style="margin-top: 1px; margin-left: -0.5%;">
+                                            <div class='view_rating' style=''></div>
+                                        </div>
+                                    </p>
+                                    <p>{{reviewItem.review}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <table style="border: none;">
+                        <tr>
+                            <form role="form">
+                                <div ng-show="hideReviewSection == false" style="width: 100%">
+                                    <div class="form-group">
+                                        <h2 style="font-family: Calibri; font-size: 21px; border-bottom: 1px solid #aaa;">
+                                            Leave
+                                            a Review
+                                        </h2>
+                                        <div id="reviewRating"></div>
+                                        <div class="alert alert-warning" role="alert" id="alert"
+                                             ng-show="reviewError == true">
+                                            Please Rate and provide
+                                            Review for this book.
+                                        </div>
+                                        <label>
+                                            <p>
+                                                Rate this book <font style="color: red">&nbsp;*</font>
+                                            </p>
+                                        </label>
+                                        <div class="row">
+                                            <star-rating rating-value="rating" max="5"
+                                                         on-rating-selected="rateFunction(rating)"
+                                                         controller="starRatingController" class="col-lg-12"
+                                                         style="margin-left: 1.6vmin;"></star-rating>
+                                        </div>
+                                        <br /> <label>
+                                            <p>
+                                                Review Comments <font style="color: red">&nbsp;*</font>
+                                            </p>
+                                        </label>
+                                        <textarea class="form-control" rows="3" ng-model="review"
+                                                  id="review"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary"
+                                            style="margin-right: 2%;"
+                                            ng-click="starRatingController.updateStars(0, 'submit')">
+                                        Submit
+                                    </button>
+                                    <button type="button" class="btn btn-default"
+                                            ng-click="starRatingController.updateStars(0, 'cancel')"
+                                            onclick="$('#review').val(null);">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br /><br />
+</div>

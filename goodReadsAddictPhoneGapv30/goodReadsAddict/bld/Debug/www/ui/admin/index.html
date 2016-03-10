@@ -1,0 +1,130 @@
+<nav class="navbar navbar-default mobile-menu" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header navbar-center">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"
+               style="font-family: Calibri; font-size: 21px; color: #000;" href="">
+                goodReadsAddict<small style="color: teal;">.com</small>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse"
+             id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="text-center">
+                    <a style="font-size: 15px!important; color: #aaa;" href="">Welcome, <i>{{loggedInUser}}</i></a>
+                </li>
+                <li class="active">
+                    <a href="#/admin">
+                        <i class="fa fa-home"></i> &nbsp;Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#/adminProfile">
+                        <i class="fa fa-user"></i> &nbsp;Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="#/adminChangePassword">
+                        <i class="fa fa-key"></i> &nbsp;Change Password
+                    </a>
+                </li>
+                <li>
+                    <a href="#/">
+                        <i class="fa fa-sign-out"></i> &nbsp;Sign Out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="content" class="container-fluid">
+	<div class="row">
+        <div class="col-lg-12">
+			<form class="form-inline" name="searchForm">
+			  <div class="">
+				<input id="searchKey" type="text" class="form-control" ng-model="userEmail" placeholder="User Email" size="60" style="width: 100%; margin-bottom: 3%;" ng-change="clearSearch()">
+                <input id="searchKey" type="text" class="form-control" ng-model="apiKey" placeholder="API Key" size="60" style="width: 100%; margin-bottom: 3%;" ng-change="clearSearch()">
+                <button class="btn btn-primary" type="submit" ng-click="getLogs()" style="width: 100%;">
+                    <i class="fa fa-search"></i>&nbsp; Search</button>
+			  </div>
+			</form>
+        </div>
+    </div>
+	<br />
+	<div class="alert alert-success" role="alert" ng-show="userTypeChanged == true">
+        <i class="fa fa-check"></i> &nbsp;Usertype changed successfully
+	</div>
+	<div class="alert alert-success" role="alert" ng-show="restricted == true">
+        <i class="fa fa-check"></i> &nbsp;User Restricted successfully
+	</div>
+	<div class="row">
+		<div class="well" ng-show="totalAPIHits <= 0 && logSearch == true">
+			<p><i>No Logs found</i></p>
+		 </div>
+		 <div class="container-fluid" ng-show="logSearch == true && totalAPIHits > 0">
+			 <div class="row">
+				<div class="col-lg-12 text-left" style="font-size: 16px;">
+					<p><b>Total API Hits on <i>{{logDate}}</i>: </b>{{totalAPIHits}}</p>
+				</div>
+			 </div>
+			 <div class="row" ng-show="userOrApiSearch == true" style="font-size: 16px;">
+				<div class="col-lg-12 text-left">
+					<p><b>User type: </b>{{userType}}</p>
+				</div>
+				<div class="col-lg-12 text-left">
+					<p><b>Limit: </b>{{limit}}</p>
+				</div>
+				<div class="col-lg-12 text-left">
+					<p><b>Status: </b>{{res}}</p>
+				</div>
+				<div class="col-lg-12 text-left" ng-hide="userStatus == 'y'">
+					<button class="btn btn-danger" type="submit" ng-click="restrictUser()" style="width: 100%; margin-bottom: 3%;">
+                        <i class="fa fa-ban"></i>&nbsp; Restrict User for Day</button>
+				</div>
+				<div class="col-lg-12 text-left">
+					<div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" style="width: 100%;" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                            <i class="fa fa-edit"></i> &nbsp;Edit User Type
+                            <span class="caret"></span>
+                        </button>
+					    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="width: 100%;">
+					      	<li role="presentation"><a role="menuitem" tabindex="-1" href="" ng-click="changeUserType('Limited')">Change to Limited</a></li>
+						    <li role="presentation"><a role="menuitem" tabindex="-1" href="" ng-click="changeUserType('Premium')">Change to Premium</a></li>
+					    </ul>
+					</div>
+				</div>
+			 </div>
+			 <br /><br />
+           <div class="table-responsive">
+               <table class="table table-striped border-table">
+                   <tbody>
+                       <tr>
+                           <th>Log</th>
+                           <th>Date</th>
+                           <th>User Email</th>
+                           <th>API Key</th>
+                       </tr>
+                       <tr ng-repeat="log in logDetails">
+                           <td>
+                               {{log.operation}}
+                           </td>
+                           <td>
+                               {{log.date}}
+                           </td>
+                           <td>
+                               {{log.user}}
+                           </td>
+                           <td>
+                               {{log.apiKey}}
+                           </td>
+                       </tr>
+                   </tbody>
+               </table>
+           </div>
+		 </div>
+      </div>
+	<br />
+</div>

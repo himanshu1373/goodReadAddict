@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <div class="row">
+    	<div class="col-lg-10 vcenter">
+        	<h1 style="">goodReadsAddict<small style="color: teal;">.com</small></h1>
+        </div><!--
+		--><div class="col-lg-2 vcenter">
+            <div class="dropdown" style="margin-top: 10%; margin-left: 10%;">
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+				{{loggedInUser}}
+				<span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#/admin"><span class="glyphicon glyphicon-home"></span> &nbsp;Home</a></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#/adminChangePassword"><span class="glyphicon glyphicon-cog"></span> &nbsp;Change Password</a></li>
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-log-out"></span> &nbsp;Sign Out</a></li>
+			  </ul>
+			</div>
+        </div>
+	</div>
+	<br />
+	<div class="alert alert-success" role="alert" id="alert" ng-show="updatedProfile == true">
+		<p><span class="glyphicon glyphicon-ok"></span> &nbsp; Your Profile has been updated successfully</p>
+	</div>
+	<div class="alert alert-warning" role="alert" id="alert" ng-show="fnameError == true">
+		Please provide valid Firstname.
+	</div>
+	<div class="alert alert-warning" role="alert" id="alert" ng-show="lnameError == true">
+		Please provide valid Lastname.
+	</div>
+    <div class="row" style="height: 500px;">
+	    <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+              <div class="panel-heading"><strong style="font-family: Calibri; font-size: 24px;">Your Profile</strong></div>
+              <div class="panel-body text-center">
+              	<form class="form-horizontal" role="form">
+				  <div class="form-group">
+					<label for="inputPassword" class="col-sm-2 control-label">Firstname</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="inputPassword" placeholder="Firstname" ng-model="fname" value="{{userDetails.fname}}">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="inputPassword" class="col-sm-2 control-label">Lastname</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="inputPassword" placeholder="Lastname" ng-model="lname" value="{{userDetails.lname}}">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label">Email</label>
+					<div class="col-sm-10">
+					  <p class="form-control-static text-left">{{userDetails.email}}</p>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label">Usertype</label>
+					<div class="col-sm-10">
+					  <p class="form-control-static text-left">{{userDetails.userType}}</p>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label">API Key</label>
+					<div class="col-sm-10">
+					  <p class="form-control-static text-left">{{userDetails.apiKey}}</p>
+					</div>
+				  </div>
+				  <button type="submit" class="btn btn-primary" style="margin-right: 2%;" ng-click="updateProfile()">Submit</button>
+				  <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+				</form>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+    <div class="row text-center footer">
+    	<h6>{{copyrightsText}}</h6>
+    </div>
+</div>

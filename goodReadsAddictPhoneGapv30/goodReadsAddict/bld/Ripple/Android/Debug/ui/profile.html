@@ -1,0 +1,107 @@
+<nav class="navbar navbar-default mobile-menu" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header navbar-center">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"
+               style="font-family: Calibri; font-size: 21px; color: #000;" href="">
+                goodReadsAddict<small style="color: teal;">.com</small>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse"
+             id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="text-center">
+                    <p style="font-size: 18px!important; color: #aaa;">Welcome, <i>{{loggedInUser}}</i></p>
+                </li>
+                <li>
+                    <a href="#/search">
+                        <i class="fa fa-home"></i> &nbsp;Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#/favorites">
+                        <i class="fa fa-heart"></i> &nbsp;Favorites
+                    </a>
+                </li>
+                <li>
+                    <a href="#/read">
+                        <i class="fa fa-book"></i> &nbsp;To Read
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#/profile">
+                        <i class="fa fa-user"></i></span> &nbsp;Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="#/changePassword">
+                        <i class="fa fa-key"></i> &nbsp;Change Password
+                    </a>
+                </li>
+                <li>
+                    <a href="#/">
+                        <i class="fa fa-sign-out"></i> &nbsp;Sign Out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+	<div class="alert alert-success" role="alert" id="alert" ng-show="updatedProfile == true">
+		<p><i class="fa fa-check"></i> &nbsp; Your Profile has been updated successfully</p>
+	</div>
+	<div class="alert alert-warning" role="alert" id="alert" ng-show="fnameError == true">
+		Please provide valid Firstname.
+	</div>
+	<div class="alert alert-warning" role="alert" id="alert" ng-show="lnameError == true">
+		Please provide valid Lastname.
+	</div>
+    <div class="row" style="height: auto;">
+        <div class="col-lg-12">
+              	<form class="form-horizontal" role="form">
+				  <div class="form-group">
+					<label for="inputPassword" class="col-sm-2 control-label">Firstname</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="inputPassword" placeholder="Firstname" value="{{userDetails.fname}}" ng-model="fname">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="inputPassword" class="col-sm-2 control-label">Lastname</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" id="inputPassword" placeholder="Lastname" value="{{userDetails.lname}}" ng-model="lname">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label">Email</label>
+					<div class="col-sm-10">
+					  <p class="form-control-static text-left">{{userDetails.email}}</p>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label">Usertype</label>
+					<div class="col-sm-10">
+					  <p class="form-control-static text-left">{{userDetails.userType}}</p>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label">API Key</label>
+					<div class="col-sm-10">
+					  <p class="form-control-static text-left">{{userDetails.apiKey}}</p>
+					</div>
+				  </div>
+                  <div class="form-group">
+                      <div class="col-sm-2"></div>
+                      <div class="col-sm-10">
+                          <button type="submit" class="btn btn-primary" style="margin-right: 2%;" ng-click="updateProfile()">Submit</button>
+                          <button type="button" class="btn btn-default" style="margin-right: 2%;" ng-click="cancel()">Cancel</button>
+                          <button type="button" class="btn btn-danger" ng-click="deleteProfile()">Delete Profile</button>
+                      </div>
+                  </div>                         
+                </form>
+        </div>
+    </div>
+</div>

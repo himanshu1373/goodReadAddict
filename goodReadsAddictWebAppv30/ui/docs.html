@@ -1,0 +1,826 @@
+<h1 class="text-center">goodReadsAddict API Documentation</h1>
+
+<div class="row">
+	<div class="col-md-10"></div>
+	<div class="col-md-2">
+		<a type="button" class="btn btn-default" href="#/"><span class="glyphicon glyphicon-book"></span> &nbsp;Back to goodReadsAddict</a>
+	</div>
+</div>
+
+<br/>
+
+
+<div id="accordion">
+
+	<!-- SEARCH -->
+	<h3><button type="button" class="btn btn-success btn-xs">GET</button> search</h3>
+	<div>
+		<p>
+			Searches for a book based upon title and isbn#. Pagination is available by include values for the start index and maxResults.
+		</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsSearchURL}}">{{docsSearchURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>title: Title of the book</li>
+				<li>isbn: ISBN Number of book (Note: 13 digit and 10 digit ISBN numbers can both be used)</li>
+				<li>startIndex: index of first book to be returned (for use in pagination)</li>
+				<li>maxResults: The number of results to be fetched (default is “10” and max is “40”)</li>
+				<li>apikey[required]: Developer's api key</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response</strong>:
+			<pre>
+{
+	"restricted": (boolean) whether the user is restricted or not,
+	"kind": (string) resource type for a volume,
+	"totalItems": (int) total items returned by the search,
+	"items": [
+ 		"kind": (string) resource type for a volume,
+ 		"id": (string) unique identifier for a volume,
+ 		"etag": (string) Opaque identifier for a specific version of a volume resource,
+ 		"selfLink": (string) Google Books API link to resource,
+ 		"volumeInfo": {
+ 			"title": (string) volume title,
+ 			"authors": (list) The names of the authors and/or editors for this volume,
+ 			"publisher": (string) Publisher of this volume,
+ 			"publishedDate": (string) Date of publication,
+ 			"industryIdentifiers": [
+			{
+				"type": (string) Identifier type. Possible values are ISBN_10, ISBN_13, ISSN and OTHER.,
+				"identifer": (string) value of identifier.
+			}],
+			"readingModes":{
+				"text": (boolean) whether text reading mode is available,
+				"image": (boolean) whether image reading mode is available
+			},
+			"pageCount": (int) Total number of pages,
+			"printType": (string) Type of publication of this volume. Possible values are BOOK or MAGAZINE
+			"categories" : (list) A list of subject categories, such as "Fiction", "Suspense", etc.
+			"averageRating": (double) The mean review rating for this volume (from Google Books API),
+			"ratingsCount": (integer) The number of review ratings for this volume (from Google Books API),
+			"contentVersion": (string) An identifier for the version of the volume content (text &amp; images),
+			"imageLinks": {} (list) A list of image links for all the sizes that are available,
+			"language": (string) Best language for this volume (based on content). It is the two-letter ISO 639-1 code such as 'fr', 'en', etc,
+			"previewLink": (string) URL to preview this volume on the Google Books site,
+			"infoLink": (string) URL to view information about this volume on the Google Books site,
+			"canonicalVolumeLink": (string) Canonical URL for a volume,
+		}
+ 		"saleInfo": {
+ 			"country": (string) The two-letter ISO_3166-1 country code for which this sale information is valid. ,
+ 			"saleability": (string) Whether or not this book is available for sale or offered for free in the Google eBookstore for the country listed above. Possible values are FOR_SALE, FREE, NOT_FOR_SALE, or FOR_PREORDER.,
+ 			"isEbook": (boolean) Whether or not the volume is an ebook
+ 		}
+ 		"accessInfo": {
+			"country": (string) The two-letter ISO_3166-1 country code for which this access information is valid.,
+			"viewability": (string) The read access of a volume. Possible values are PARTIAL, ALL_PAGES, NO_PAGES or UNKNOWN. This value depends on the country listed above. A value of PARTIAL means that the publisher has allowed some portion of the volume to be viewed publicly, without purchase. This can apply to eBooks as well as non-eBooks. Public domain books will always have a value of ALL_PAGES.
+			"embeddable": (boolean) Whether this volume can be embedded in a viewport using the Embedded Viewer API.	,
+			"publicDomain": (boolean) Whether or not this book is public domain in the country listed above.	
+			"textToSpeechPermission": (string) Whether text-to-speech is permitted for this volume. Values can be ALLOWED, ALLOWED_FOR_ACCESSIBILITY, or NOT_ALLOWED.,
+			"epub": {
+			  "isAvailable": (boolean) whether information about epub content is available,
+			  "acsTokenLink": (string) URL to retrieve ACS token for epub download
+			},
+			"pdf": {
+				"isAvailable": (boolean) whether information about pdf content is available,
+			},
+			"webReaderLink": URL to read this volume on the Google Books site,
+			"accessViewStatus": (string) Combines the access and viewability of this volume into a single status field for this user. Values can be FULL_PURCHASED, FULL_PUBLIC_DOMAIN, SAMPLE or NONE,
+			"quoteSharingAllowed": (boolean) Flag for quote sharing
+		}
+	  ]
+}</pre>
+		</p>
+		<p>
+		<strong>API Tester</strong></br>
+			<label>title:
+				<input type="text" ng-model="searchObj.title" placeholder="title"></input>
+			</label>
+			<br/>
+			
+			<label>isbn:
+				<input type="text" ng-model="searchObj.isbn" placeholder="isbn"></input>
+			</label>
+			<br/>
+			
+			<label>startIndex:
+				<input type="text" ng-model="searchObj.startIndex" placeholder="startIndex"></input>
+			</label>
+			<br/>
+			
+			<label>maxResults:
+				<input type="text" ng-model="searchObj.maxResults" placeholder="maxResults"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="search()"></input>
+
+			<pre ng-show="searchResponse != null">
+				<p ng-bind="searchResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- SEARCH BOOK ID-->
+	<h3><button type="button" class="btn btn-success btn-xs">GET</button> search/{bookID}</h3>
+	<div>
+		<p>
+			Searches for a book based upon the bookID
+		</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsSearchBookIdURL}}">{{docsSearchBookIdURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>bookId[required]: Unique ID of the book (from Google's API)</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response (See Search)</strong>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+			<label>book ID:
+				<input type="text" ng-model="searchBookIDObj.bookID" placeholder="book ID"></input>
+			</label>
+			<br/>
+			
+			<input type="submit" value="Try it now!" ng-click="searchBookID()"></input>
+
+			<pre ng-show="searchBookIDResponse != null">
+				<p ng-bind="searchBookIDResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- REGISTER-->
+	<h3><button type="button" class="btn btn-primary btn-xs">POST</button> register</h3>
+	<div>
+		<p>Registers a user based upon the supplied fname, lname, email, password</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsRegisterURL}}">{{docsRegisterURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>fname[required]: first name of user</li>
+				<li>lname[required]: last name of user</li>
+				<li>email[required]: email of user</li>
+				<li>password[required]: user's password</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response</strong>
+			<pre>
+{
+	"registered": (boolean), whether registration was successful
+	"email": (String), whether the email passed was valid or invalid
+}</pre>
+		</p>
+		<p>
+		<strong>API Tester</strong></br>
+
+			<label>fname:
+				<input type="text" ng-model="registerObj.fname" placeholder="first name"></input>
+			</label>
+			<br/>
+			
+			<label>lname:
+				<input type="text" ng-model="registerObj.lname" placeholder="last name"></input>
+			</label>
+			<br/>
+			
+			<label>email:
+				<input type="text" ng-model="registerObj.email" placeholder="email address"></input>
+			</label>
+			<br/>
+			
+			<label>password:
+				<input type="password" ng-model="registerObj.password" placeholder="password"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="createAccount()"></input>
+
+			<pre ng-show="createAccountResponse != null">
+				<p ng-bind="createAccountResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+	
+	<!-- Authentication -->
+	<h3><button type="button" class="btn btn-success btn-xs">GET</button> auth</h3>
+	<div>
+		<p>Authenticates a user based upon the supplied email and password</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsAuthURL}}">{{docsAuthURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email[required]: email of user</li>
+				<li>password[required]: user's password</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response</strong>
+			<pre>
+{
+"validUser" : (boolean) whether the user is valid or not
+"userDetails" : {
+	"fname" : (string) first name of user,
+	"lname" : (string) last name of user,
+	"apiKey" : (string) api key,
+	"userType" : (string) type: Limited or Premium,
+	"isRestricted" : (string) n or y
+	}
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+
+			<label>email:
+				<input type="text" ng-model="authObj.email" placeholder="email address"></input>
+			</label>
+			<br/>
+			
+			<label>password:
+				<input type="password" ng-model="authObj.password" placeholder="password"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="auth()"></input>
+
+			<pre ng-show="authResponse != null">
+				<p ng-bind="authResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- Profiles -->
+	<h3><button type="button" class="btn btn-success btn-xs">GET</button> profiles</h3>
+	<div>
+		<p>Gets profile information for a given user</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsProfilesURL}}">{{docsProfilesURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email[required]: email of user</li>
+				<li>apikey[required]: Developer's api key</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response</strong>
+			<pre>
+{
+	"fname": (string) first name of user,
+	"lname": (string) last name of user,
+	"apiKey": (string) apikey,
+	"userType": (string) type: Limited or Premium,
+	"email": (string) email of user
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+
+			<label>email:
+				<input type="text" ng-model="profileObj.email" placeholder="email address"></input>
+			</label>
+			<br/>
+
+			<label>apiKey:
+				<input type="text" ng-model="profileObj.apiKey" placeholder="apikey"></input>
+			</label>
+
+			<input type="submit" value="Try it now!" ng-click="profiles()"></input>
+
+			<pre ng-show="profilesResponse != null">
+				<p ng-bind="profilesResponse">
+				</p>
+			</pre>
+
+		</p>
+	</div>
+
+	<!-- Change Password -->
+	<h3><button type="button" class="btn btn-warning btn-xs">PUT</button> changePassword</h3>
+	<div>
+		<p>Changes password for a user</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsChangePasswordURL}}">{{docsChangePasswordURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email[required]: email of user</li>
+				<li>currentPassword[required]: user's current password</li>
+				<li>newPassword[required]: the new password the user is switching to</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response</strong>
+			<pre>
+{
+  "success" : (boolean) depending on success of operation
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+
+			<label>email:
+				<input type="text" ng-model="passwordObj.email" placeholder="email address"></input>
+			</label>
+			<br/>
+			
+			<label>current password:
+				<input type="text" ng-model="passwordObj.currentPass" placeholder="current password"></input>
+			</label>
+			<br/>
+
+			<label>new password:
+				<input type="text" ng-model="passwordObj.newPass" placeholder="new password"></input>
+			</label>
+			<br/>
+			
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="changePassword()"></input>
+
+			<pre ng-show="changePasswordResponse != null">
+				<p ng-bind="changePasswordResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- Update User Details -->
+	<h3><button type="button" class="btn btn-warning btn-xs">PUT</button> updateUserDetails</h3>
+	<div>
+		<p>Updates the details of a user</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsUpdateUserURL}}">{{docsUpdateUserURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>fname[required]: new first name of user</li>
+				<li>lname[required]: new last name of user</li>
+				<li>email[required]: email of user</li>
+			</ul>
+		</p>	
+		<strong>Response</strong>
+			<pre>
+{
+  "fname" : (String) new first name of user,
+  "lname" : (String) new last name of user,
+  "success" : (boolean) depending on success of operation
+}</pre>
+		</p>
+		<p>Note: Admin only</p>
+	</div>
+
+	<!-- Update User Type -->
+	<h3><button type="button" class="btn btn-warning btn-xs">PUT</button> updateUserType</h3>
+	<div>
+		<p>Updates the type of a user (Limited, Premium, or Admin)</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsUpdateUserTypeURL}}">{{docsUpdateUserTypeURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email: email of user</li>
+				<li>apikey: Developer's api key</li>
+				<li>userType[required]: type of user</li>
+			</ul>
+		</p>	
+		<strong>Response</strong>
+			<pre>
+{   
+  "success" : (boolean) depending on success of operation
+}</pre>
+		</p>
+
+		<p>Note: Admin only</p>
+	</div>
+
+	<!-- Restrict User-->
+	<h3><button type="button" class="btn btn-warning btn-xs">PUT</button> restrictUser</h3>
+	<div>
+		<p>Restricts a user for the day</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docRestrictUserURL}}">{{docRestrictUserURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email: email of user to restrict</li>
+				<li>apikey: Developer's api key</li>
+			</ul>
+		</p>	
+		<strong>Response</strong>
+			<pre>
+{   
+  "success" : (boolean) depending on success of operation
+}</pre>
+		</p>
+		<p>Note: Admin only</p>
+	</div>
+
+	<!-- Delete User-->
+	<h3><button type="button" class="btn btn-danger btn-xs">DELETE</button> deleteUser</h3>
+	<div>
+		<p>Deletes a user</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsDeleteUserURL}}">{{docsDeleteUserURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email[required]: email of user</li>
+				<li>apiKey[required]: Developer api key</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response</strong>
+			<pre>
+{
+  "success" : (boolean) depending on success of operation
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+
+			<label>email:
+				<input type="text" ng-model="deleteUserObj.email" placeholder="email"></input>
+			</label>
+			<label>apikey:
+				<input type="text" ng-model="deleteUserObj.apiKey" placeholder="apikey"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="deleteUser()"></input>
+
+			<pre ng-show="deleteUserResponse != null">
+				<p ng-bind="deleteUserResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- POST Fav Read-->
+	<h3><button type="button" class="btn btn-primary btn-xs">POST</button> fav_read/add</h3>
+	<div>
+		<p> Adds to favorites or to read list for user based upon parameters passed</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsAddFavReadURL}}">{{docsAddFavReadURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email[required]: email of user</li>
+				<li>bookId[required]: Unique ID of the book (from Google's API)</li>
+				<li>type[required]: Type of list to add to (Allowed values: fav for favourites, read for to-read list</li>
+			</ul>
+		</p>	
+		<p>
+			<strong>Response</strong>
+			<pre>
+{
+  "success" : (boolean) depending on success of operation
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+			<label>email:
+				<input type="text" ng-model="favReadPostObj.email" placeholder="email"></input>
+			</label>
+			<br/>
+
+			<label>bookId:
+				<input type="text" ng-model="favReadPostObj.bookID" placeholder="bookId"></input>
+			</label>
+			<br/>
+
+			<label>type:
+				<input type="text" ng-model="favReadPostObj.listType" placeholder="type"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="postFavRead()"></input>
+
+			<pre ng-show="postFavReadResponse != null">
+				<p ng-bind="postFavReadResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- Get Fav Read-->
+	<h3><button type="button" class="btn btn-success btn-xs">GET</button> fav_read</h3>
+	<div>
+		<p> Gets favorites or to read list for user based upon parameters passed </p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsGetFavReadURL}}">{{docsGetFavReadURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email[required]: email of user</li>
+				<li>type[required]: Type of list to add to (Allowed values: fav for favourites, read for to-read list</li>
+			</ul>
+		</p>
+		<p><strong>Response</strong>
+			<pre>
+{
+  {
+  "totalItems": (int) Number of items in list,
+  "items": [
+    {
+      "imageLink": (string) link to image in Google book's site,
+      "publisher": (string) book's publisher,
+      "publishedDate": (stirng) date published,
+      "bookName": (string) full name of book,
+      "bookId": (string) ID used in Google's book API (not to be confused with ISBN)
+      "authors": [] (list) list of author's names in strings,
+      "infoLink": (string) link to information in Google's book API
+    }
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+			<label>email:
+				<input type="text" ng-model="favReadGetObj.email" placeholder="email"></input>
+			</label>
+			<br/>
+
+			<label>type:
+				<input type="text" ng-model="favReadGetObj.listType" placeholder="type"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="getFavRead()"></input>
+
+			<pre ng-show="getFavReadResponse != null">
+				<p ng-bind="getFavReadResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- Delete Fav Read-->
+	<h3><button type="button" class="btn btn-danger btn-xs">DELETE</button> fav_read/remove</h3>
+	<div>
+		<p> Removes an item from a user's favorites or to read list based upon parameters passed </p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsRemoveFavReadURL}}">{{docsRemoveFavReadURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>email[required]: email of user</li>
+				<li>bookId[required]: Unique ID of the book (from Google's API)</li>
+				<li>type[required]: Type of list to add to (Allowed values: fav for favourites, read for to-read list</li>
+			</ul>
+		</p>	
+		<p><strong>Response</strong>
+			<pre>
+{
+  "success" : (boolean) depending on success of operation
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+			<label>email:
+				<input type="text" ng-model="favReadDeleteObj.email" placeholder="email"></input>
+			</label>
+			<br/>
+
+			<label>bookId:
+				<input type="text" ng-model="favReadDeleteObj.bookId" placeholder="bookId"></input>
+			</label>
+			<br/>
+
+			<label>type:
+				<input type="text" ng-model="favReadDeleteObj.listType" placeholder="type"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="deleteFavRead()"></input>
+
+			<pre ng-show="deleteFavReadResponse != null">
+				<p ng-bind="deleteFavReadResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- Add Review -->
+	<h3><button type="button" class="btn btn-primary btn-xs">POST</button> reviews/add</h3>
+	<div>
+		<p> Adds a review for a particular book for a user</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsAddReviewsURL}}">{{docsAddReviewsURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>isbn[required]: ISBN Number of book (Note: 13 digit and 10 digit ISBN numbers can both be used)</li>
+				<li>bookId[required]: Unique ID of the book (from Google's API)</li>
+				<li>email[required]: email of user</li>
+				<li>review[required]: full text review by user</li>
+				<li>rating[required]: rating of book on scale of 1 to 5</li>
+			</ul>
+		</p>	
+		<p><strong>Response</strong>
+			<pre>
+{
+  "totalReviews": count of reviews for this book,
+  "reviews": [
+    {
+      "date": (string) date and time reviewed,
+      "review": (string) full text review,
+      "rating": (string) rating of book on scale of 1 to 5
+      "user": (string) email of user
+    }
+  ],
+  "success": (boolean) depending on success of operation
+  
+  Note: Also includes Google Books API info (See Search documentation)
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+			
+			<label>isbn:
+				<input type="text" ng-model="addReviewObj.isbn" placeholder="isbn"></input>
+			</label>
+			<br/>
+
+			<label>bookId:
+				<input type="text" ng-model="addReviewObj.bookId" placeholder="bookId"></input>
+			</label>
+			<br/>
+
+			<label>email:
+				<input type="text" ng-model="addReviewObj.email" placeholder="email"></input>
+			</label>
+			<br/>
+
+			<label>review:
+				<input type="text" ng-model="addReviewObj.review" placeholder="review"></input>
+			</label>
+			<br/>
+
+			<label>rating:
+				<input type="text" ng-model="addReviewObj.rating" placeholder="rating"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="addReview()"></input>
+
+			<pre ng-show="addReviewResponse != null">
+				<p ng-bind="addReviewResponse">
+				</p>
+			</pre>
+		</p>
+	</div>
+
+	<!-- Update Review -->
+	<h3><button type="button" class="btn btn-warning btn-xs">PUT</button> reviews/update</h3>
+	<div>
+		<p>Updates a review for a particular book for a user</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsUpdateReviewsURL}}">{{docsUpdateReviewsURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters</strong>
+			<ul>
+				<li>isbn[required]: ISBN Number of book (Note: 13 digit and 10 digit ISBN numbers can both be used)</li>
+				<li>bookId[required]: Unique ID of the book (from Google's API)</li>
+				<li>email[required]: email of user</li>
+				<li>review: full text review by user</li>
+				<li>rating[required]: rating of book on scale of 1 to 5</li>
+				<li>apikey[required]: Developer's api key</li>
+			</ul>
+		</p>	
+		<p><strong>Response</strong>
+			<pre>
+{
+  "totalReviews": count of reviews for this book,
+  "reviews": [
+    {
+      "date": (string) date and time reviewed,
+      "review": (string) full text review,
+      "rating": (string) rating of book on scale of 1 to 5
+      "user": (string) email of user
+    }
+  ],
+  "success": (boolean) status of operation success
+  
+  Note: Also includes Google Books API info (See Search documentation)
+}</pre>
+		</p>
+		<p>
+			<strong>API Tester</strong></br>
+			
+			<label>isbn:
+				<input type="text" ng-model="updateReviewObj.isbn" placeholder="isbn"></input>
+			</label>
+			<br/>
+
+			<label>bookId:
+				<input type="text" ng-model="updateReviewObj.bookId" placeholder="bookId"></input>
+			</label>
+			<br/>
+
+			<label>email:
+				<input type="text" ng-model="updateReviewObj.email" placeholder="email"></input>
+			</label>
+			<br/>
+
+			<label>review:
+				<input type="text" ng-model="updateReviewObj.review" placeholder="review"></input>
+			</label>
+			<br/>
+
+			<label>rating:
+				<input type="text" ng-model="updateReviewObj.rating" placeholder="rating"></input>
+			</label>
+			<br/>
+
+			<input type="submit" value="Try it now!" ng-click="updateReview()"></input>
+
+			<pre ng-show="updateReviewResponse != null">
+				<p ng-bind="updateReviewResponse">
+				</p>
+			</pre>
+
+	</div>
+
+	<!-- Get Logs -->
+	<h3><button type="button" class="btn btn-success btn-xs">GET</button> logs</h3>
+	<div>
+		<p>Gets the api logs</p>
+		<p>
+			<strong>Sample Call</strong><br/>
+			<a href="{{docsGetLogsURL}}">{{docsGetLogsURL}}</a>
+		</p>
+		<p>
+			<strong>Parameters (one of email, apikey is required)</strong>
+			<ul>
+				<li>email: email of user</li>
+				<li>apikey: Developer's api key</li>
+				<li>admin apikey[required]: Developer's api key (admin)</li>
+			</ul>
+		</p>	
+		<strong>Response</strong>
+			<pre>
+{
+    "totalItems": (int) total logs returned,
+    "logDate": (string) date logs being returned for,
+    "items": [
+        {
+            "date": (string) date logs being returned for,
+            "apiKey": (string) developer api key,
+            "restricted": (string) n for not restricted, y for restricted,
+            "userType": (string) limited or premium
+            "operation": (string) description of api call by user
+            "user": (string) email of user
+        }
+    ]
+}</pre>
+		</p>
+		<p>Note: Admin only</p>
+	</div>
+
+</div>
+<h4>Every parameter listed is document based and the variable type doesn't count towards the descriptions</h4>
+<div class="row text-center footer">
+	<h6 ng-bind-html="copyrightsText"></h6>
+</div>

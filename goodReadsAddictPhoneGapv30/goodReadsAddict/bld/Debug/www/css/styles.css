@@ -1,0 +1,106 @@
+body, html {
+    height: 100%;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: #f4f2f2;
+	border: 1px solid #ddd;
+}
+.pagination > .active1 > a,
+.pagination > .active1 > span,
+.pagination > .active1 > a:hover,
+.pagination > .active1 > span:hover,
+.pagination > .active1 > a:focus,
+.pagination > .active1 > span:focus {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #428bca;
+  border-color: #428bca;
+}
+.title {
+	color: teal;
+	font-family: Calibri;
+	font-size: 1.5em!important;
+}
+.subtitle {
+	color: #aaa;
+	font-family: Calibri;
+	font-size: 0.7em!important;
+}
+p {
+	font-family: Calibri;
+	font-size: 16px!important;
+	text-justify: auto;
+}
+
+.rating_bar {
+	width: 110px;
+	height: 20px;
+    background: url(../images/stars1.png);
+    background-repeat: repeat-x;
+    background-position: 0 0;
+    text-align: left;
+}
+.view_rating {
+	height: 20px;
+    background: url(../images/stars1.png);
+    background-position: 0 -23px;
+    background-repeat: repeat-x;
+}
+
+#viewerCanvas {
+	width: 100%;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #000;
+}
+
+.rating{
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+.rating li {
+    padding: 1px;
+    color: #a9a9a9;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    list-style-type: none;
+    display: inline-block;
+    cursor: pointer;
+}
+.rating li.filled {
+	color: #fd0;
+}
+.rating li.black {
+	color: #000;
+}
+.border-table {
+    font-family: Calibri;
+    font-size: 18px;
+    border: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+    border-collapse: collapse;
+}
+.border-table th {
+    border: 1px solid #aaa;
+    border-collapse: collapse;
+}
+.border-table td {
+    font-family: Calibri;
+    font-size: 15px;
+    border: 1px solid #aaa;
+    border-collapse: collapse;
+}
